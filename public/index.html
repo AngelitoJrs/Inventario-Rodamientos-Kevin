@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodamientos KEVIN</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root { 
+            --primary: #0a2e5c; 
+            --accent: #007bff;
+            --success: #28a745;
+            --bg: #f8f9fa;
+        }
+
+        body { 
+            background-color: var(--bg); 
+            font-family: 'Inter', sans-serif; 
+            color: #333;
+        }
+
+        .navbar { 
+            background: var(--primary); 
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .card { 
+            border: none; 
+            border-radius: 16px; 
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            padding: 10px 15px;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+            border-color: var(--accent);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+        }
+
+        .btn-gestion {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .table { border-collapse: separate; border-spacing: 0 8px; }
+        .table thead th { background: transparent; color: #666; border: none; font-size: 0.8rem; text-transform: uppercase; }
+        .table tbody tr { background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.02); border-radius: 10px; }
+        .table tbody td { border: none; padding: 15px; }
+        .table tbody tr td:first-child { border-radius: 12px 0 0 12px; }
+        .table tbody tr td:last-child { border-radius: 0 12px 12px 0; }
+
+        .badge-stock {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark py-3 sticky-top">
+    <div class="container d-flex justify-content-between">
+        <span class="navbar-brand fw-bold animate__animated animate__fadeInLeft">
+            <i class="bi bi-box-seam-fill me-2 text-info"></i> KEVIN <span class="fw-light">RODAMIENTOS</span>
+        </span>
+        <div class="text-white small animate__animated animate__fadeInRight">
+            <span id="fechaActual"></span>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="row g-4">
+        <div class="col-lg-4 animate__animated animate__fadeInUp">
+            <div class="card shadow-sm p-4">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3">
+                        <i class="bi bi-plus-lg text-primary fs-4"></i>
+                    </div>
+                    <h5 class="fw-bold m-0">Nuevo Ingreso</h5>
+                </div>
+                
+                <form id="formProducto">
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">SKU / CÓDIGO TÉCNICO</label>
+                        <input type="text" id="sku" class="form-control" placeholder="Ej: 6309-2RS" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">MARCA</label>
+                        <input type="text" id="marca" class="form-control" placeholder="SKF, FAG, NSK...">
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-1">DESCRIPCIÓN</label>
+                        <input type="text" id="nombre" class="form-control" placeholder="Ej: Rodamiento Alternador">
+                    </div>
+                    <div class="row g-2 mb-4">
+                        <div class="col-6">
+                            <label class="small fw-bold text-muted mb-1">STOCK</label>
+                            <input type="number" id="stock" class="form-control" value="0">
+                        </div>
+                        <div class="col-6">
+                            <label class="small fw-bold text-muted mb-1">P. VENTA ($)</label>
+                            <input type="number" step="0.01" id="precio" class="form-control" placeholder="0.00">
+                        </div>
+                    </div>
+                    <button type="button" id="btnGuardar" class="btn btn-primary w-100 py-3 shadow">
+                        GUARDAR EN BASE DE DATOS
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-8 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <div class="card shadow-sm p-4">
+                <ul class="nav nav-pills mb-4 bg-light p-1 rounded-3" id="pills-tab">
+                    <li class="nav-item w-50">
+                        <button class="nav-link active w-100 fw-bold" id="inv-tab" data-bs-toggle="pill" data-bs-target="#tab-inv">
+                            <i class="bi bi-stack me-2"></i>INVENTARIO
+                        </button>
+                    </li>
+                    <li class="nav-item w-50">
+                        <button class="nav-link w-100 fw-bold" id="hist-tab" data-bs-toggle="pill" data-bs-target="#tab-hist">
+                            <i class="bi bi-journal-text me-2"></i>AUDITORÍA
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="tab-inv">
+                        <div class="row g-2 mb-4">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                                    <input type="text" id="buscarSku" class="form-control border-start-0" placeholder="SKU">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="buscarMarca" class="form-control" placeholder="Marca">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="buscarDesc" class="form-control" placeholder="Descripción">
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <button class="btn btn-success fw-bold w-100" id="btnExportar">
+                                    <i class="bi bi-file-earmark-excel"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th class="text-start">PRODUCTO</th>
+                                        <th>DISPONIBLE</th>
+                                        <th>P. UNITARIO</th>
+                                        <th>GESTIÓN</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaProductos" class="text-center"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tab-hist">
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <tbody id="tablaHistorial"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalOperacion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 p-3 shadow-lg" style="border-radius: 24px;">
+            <div class="modal-header border-0">
+                <h5 class="fw-bold" id="modalTitulo"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-0">
+                <form id="formOperacion">
+                    <input type="hidden" id="opId">
+                    <div class="mb-3">
+                        <label class="small fw-bold">CANTIDAD</label>
+                        <input type="number" id="opCantidad" class="form-control form-control-lg">
+                    </div>
+                    <div class="mb-3" id="divPrecioCosto" style="display:none;">
+                        <label class="small fw-bold text-success">COSTO UNITARIO ($)</label>
+                        <input type="number" step="0.01" id="opPrecioCosto" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold text-primary" id="labelTercero">CLIENTE / EMPRESA</label>
+                        <input type="text" id="opTercero" class="form-control" placeholder="Ej: Talleres Repuesto C.A.">
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold">REFERENCIA (N° NOTA / FACTURA)</label>
+                        <input type="text" id="opNota" class="form-control" placeholder="Ej: 00452">
+                    </div>
+                    <button type="button" id="btnConfirmarOp" class="btn btn-primary w-100 py-3 mt-2 fw-bold shadow">
+                        PROCESAR AHORA
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="./index.js"></script>
+<script>
+    document.getElementById('fechaActual').innerText = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
